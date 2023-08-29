@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kyoto Beautification</title>
+  <link href="style.css" media="all" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+  <div class="all">
+    <h1>Which image looks more beautiful?</h1>
+      <div class="row">
+        <div class="column">
+        <img  id="pic_left" class="img" src="">
+        <br>
+        <button  id="left_button" class="arrow">←</button>
+        </div>
+
+        <div class="column">
+          <img id="pic_right" class="img" src="">
+          <br>
+          <button id="right_button" class="arrow">→</button>
+       </div>
+      </div>
+  </div>
+  <div class="end">
+    <div style="padding-top:50px;">Data collected through this website will be used for my dissertation for my Master's at University College London. 
+      My dissertation topic aims to map the beauty of streets in Kyoto, Japan using machine learning models trained on the comparison results collected through this website.</div>
+    <div style=" padding-top:10px;padding-bottom:20px;">Privacy Notice: <a href=""  target="_blank">link</a> </div>
+  </div>
+    
+
+</body>
+
+<script type="module">
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
+  // SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = { // 
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: "",
+    databaseURL: '',
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // MY CODE
+  import {getDatabase, push, set, get, ref} 
+  from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"//update, remove, child
+
+  const db = getDatabase(); // database
+  var left_num = 0
+  var right_num = 1
+  let img_left = document.getElementById("pic_left"); 
+  let img_right = document.getElementById("pic_right"); 
+  left_num = getRandomInt(1500)
+  right_num = getRandomInt(1500)
+  repeat()
+  img_left.src = "images_num/" + left_num +".jpg";
+  img_right.src = "images_num/" + right_num +".jpg";
+
+function getRandomInt(max) { // number between 0 & max -1
+  return ( Math.floor(Math.random() * Math.floor(max)) );
+}
+function repeat(){
+    left_num = getRandomInt(1500)
+    right_num = getRandomInt(1500)
+    if (left_num == right_num){
+        repeat()
+    }
+}
+function clickedLeft(){
+    pushData(0)
+
+    repeat()
+    img_left.src = "images_num/" + left_num +".jpg";
+    img_right.src = "images_num/" + right_num +".jpg";
+}
+function clickedRight(){
+  pushData(1)
+
+    repeat()
+    img_left.src = "images_num/" + left_num +".jpg";
+    img_right.src = "images_num/" + right_num +".jpg";
+}
+
+function pushData(num){
+  push(ref(db),{
+      pic1: left_num,
+      pic2: right_num,
+      which: num
+    })
+}
+
+  document.getElementById ("left_button").addEventListener ("click", clickedLeft, false);
+  document.getElementById ("right_button").addEventListener ("click", clickedRight, false);
+</script>
+</html>
